@@ -17,10 +17,8 @@ def check_s3_availability(srr_id):
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, 
                                timeout=10, check=True)
-        # Parse output to find FASTQ files
-        files = [line.split()[-1] for line in result.stdout.strip().split('\n') 
-                 if line and '.fastq.gz' in line]
-        return len(files) > 0, files
+        files = [line.split()[-1] for line in result.stdout.strip().splitlines() if line]
+        return True, files
     except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
         return False, []
 
@@ -39,6 +37,3 @@ if __name__ == "__main__":
             'files': ', '.join(files) if files else 'N/A'
         })
         print(f"{srr_id}: {'✓' if available else '✗'}")
-    
-    print(f"\n✓ Available on AWS: {df['aws_available'].sum()} / {len(df)}")
-    print(f"✗ Need NCBI fallback: {(~df['aws_available']).sum()}")
