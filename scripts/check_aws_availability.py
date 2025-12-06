@@ -37,3 +37,4 @@ if __name__ == "__main__":
             'files': ', '.join(files) if files else 'N/A'
         })
         print(f"{srr_id}: {'✓' if available else '✗'}")
+    
