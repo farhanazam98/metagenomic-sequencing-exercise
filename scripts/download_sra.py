@@ -3,16 +3,35 @@ from pathlib import Path
 import pandas as pd
 import subprocess
 
+def ensure_compressed(srr_id, output_dir):
+    """
+    If uncompressed FASTQ files exist, gzip them.
+    Returns True if compressed FASTQs exist after this function.
+    """
+    output_dir = Path(output_dir)
+
+    gz_files = list(output_dir.glob(f"{srr_id}*.fastq.gz"))
+    if gz_files:
+        return True
+
+    fastq_files = list(output_dir.glob(f"{srr_id}*.fastq"))
+    if fastq_files:
+        print(f"⚠️  {srr_id} - Found uncompressed FASTQ, compressing...")
+        for fastq in fastq_files:
+            print(f"    Compressing {fastq} ...", flush=True)
+            subprocess.run(["gzip", str(fastq)], check=True)
+            print(f"    Done {fastq}", flush=True)
+        return True
+
+    return False
+
+
 def check_downloaded(srr_id, output_dir):
     """Check if SRR files already exist"""
-    output_dir = Path(output_dir)
-    expected_files = list(output_dir.glob(f"{srr_id}*.fastq.gz"))
-    
-    if expected_files:
-        print(f"✓ {srr_id} - Already downloaded, skipping")
+    if ensure_compressed(srr_id, output_dir):
+        print(f"✓ {srr_id} - Ready (already present)")
         return True
-    else:
-        return False
+    return False
 
 def download_srr(srr_id, output_dir):
     """Download SRR if not already present"""
@@ -35,7 +54,7 @@ def download_srr(srr_id, output_dir):
             srr_id
         ]
         subprocess.run(cmd, check=True)        
-        
+
         # Compress the files
         for fastq in output_dir.glob(f"{srr_id}*.fastq"):
             subprocess.run(["gzip", str(fastq)], check=True)
