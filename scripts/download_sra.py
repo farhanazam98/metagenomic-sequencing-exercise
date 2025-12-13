@@ -31,6 +31,7 @@ def download_srr(srr_id, output_dir):
             "fasterq-dump",
             "--split-files",
             "--outdir", str(output_dir),
+            "--progress",
             srr_id
         ]
         subprocess.run(cmd, check=True, capture_output=True, text=True)
