@@ -34,7 +34,7 @@ def download_srr(srr_id, output_dir):
             "--progress",
             srr_id
         ]
-        subprocess.run(cmd, check=True, capture_output=True, text=True)
+        subprocess.run(cmd, check=True)        
         
         # Compress the files
         for fastq in output_dir.glob(f"{srr_id}*.fastq"):
