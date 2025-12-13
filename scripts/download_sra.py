@@ -57,8 +57,13 @@ def download_srr(srr_id, output_dir):
 
         # Compress the files
         for fastq in output_dir.glob(f"{srr_id}*.fastq"):
-           subprocess.run(["gzip", "-v", str(fastq)], check=True)
-        
+           subprocess.run(
+            ["gzip", "-v", str(fastq)],
+            check=True,
+            stdout=None,
+            stderr=None
+        )
+
         print(f"✓ {srr_id} - Download complete")
         return True
         
