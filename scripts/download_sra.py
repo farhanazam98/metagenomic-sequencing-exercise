@@ -2,28 +2,32 @@
 from pathlib import Path
 import pandas as pd
 import subprocess
+import shutil
+
+COMPRESSOR = "pigz" if shutil.which("pigz") else "gzip"
+
 
 def ensure_compressed(srr_id, output_dir):
-    """
-    If uncompressed FASTQ files exist, gzip them.
-    Returns True if compressed FASTQs exist after this function.
-    """
     output_dir = Path(output_dir)
 
-    gz_files = list(output_dir.glob(f"{srr_id}*.fastq.gz"))
-    if gz_files:
+    if list(output_dir.glob(f"{srr_id}*.fastq.gz")):
         return True
 
     fastq_files = list(output_dir.glob(f"{srr_id}*.fastq"))
-    if fastq_files:
-        print(f"⚠️  {srr_id} - Found uncompressed FASTQ, compressing...")
-        for fastq in fastq_files:
-            print(f"    Compressing {fastq} ...", flush=True)
-            subprocess.run(["gzip", str(fastq)], check=True)
-            print(f"    Done {fastq}", flush=True)
-        return True
+    if not fastq_files:
+        return False
 
-    return False
+    for fastq in fastq_files:
+        print(f"    Compressing {fastq} using {COMPRESSOR}", flush=True)
+
+        cmd = [COMPRESSOR, "-f"]
+        if COMPRESSOR == "pigz":
+            cmd += ["-p", "4"]
+        cmd.append(str(fastq))
+
+        subprocess.run(cmd, check=True)
+
+    return True
 
 
 def check_downloaded(srr_id, output_dir):
