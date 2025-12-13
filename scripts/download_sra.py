@@ -7,6 +7,34 @@ import shutil
 COMPRESSOR = "pigz" if shutil.which("pigz") else "gzip"
 
 
+def compress_fastq_with_progress(fastq_path, threads=4):
+    """
+    Compress a FASTQ file using pigz (preferred) or gzip with a live progress bar using pv.
+    Replaces the original FASTQ with a .fastq.gz file.
+    """
+    fastq_path = Path(fastq_path)
+    gz_path = fastq_path.with_suffix(fastq_path.suffix + ".gz")
+
+    if gz_path.exists():
+        print(f"✓ {gz_path.name} already exists, skipping compression")
+        return gz_path
+
+    print(f"    Compressing {fastq_path.name} with {COMPRESSOR} and progress bar...")
+
+    if COMPRESSOR == "pigz":
+        cmd = f"pv {fastq_path} | pigz -p {threads} > {gz_path}"
+    else:
+        cmd = f"pv {fastq_path} | gzip > {gz_path}"
+
+    subprocess.run(cmd, shell=True, check=True)
+
+    # Remove original FASTQ
+    fastq_path.unlink()
+
+    print(f"    ✓ {gz_path.name} compression complete")
+    return gz_path
+
+
 def ensure_compressed(srr_id, output_dir):
     output_dir = Path(output_dir)
 
@@ -18,14 +46,7 @@ def ensure_compressed(srr_id, output_dir):
         return False
 
     for fastq in fastq_files:
-        print(f"    Compressing {fastq} using {COMPRESSOR}", flush=True)
-
-        cmd = [COMPRESSOR, "-f"]
-        if COMPRESSOR == "pigz":
-            cmd += ["-p", "4"]
-        cmd.append(str(fastq))
-
-        subprocess.run(cmd, check=True)
+        compress_fastq_with_progress(fastq, threads=4)
 
     return True
 
