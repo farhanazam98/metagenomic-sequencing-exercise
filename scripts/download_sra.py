@@ -3,6 +3,8 @@ from pathlib import Path
 import pandas as pd
 import subprocess
 import shutil
+from concurrent.futures import ThreadPoolExecutor, as_completed
+
 
 COMPRESSOR = "pigz" if shutil.which("pigz") else "gzip"
 
@@ -99,16 +101,31 @@ def download_srr(srr_id, output_dir):
 if __name__ == "__main__":
     # Load SRR list
     srr_list = pd.read_csv("data/srr_acc_list.txt", header=None, names=["srr_id"])
+
+    # Number of parallel downloads (adjust based on your instance)
+    MAX_WORKERS = 2 # for t3.large
+
     
     # Download each
     downloaded = 0
     failed = []
     
-    for srr_id in srr_list["srr_id"]:
-        if download_srr(srr_id, "data/raw/fastq/"):
-            downloaded += 1
-        else:
-            failed.append(srr_id)
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        # Submit all download jobs
+        futures = {executor.submit(download_srr, srr_id, "data/raw/fastq/"): srr_id 
+                   for srr_id in srr_list["srr_id"]}
+        
+        # Process as they complete
+        for future in as_completed(futures):
+            srr_id = futures[future]
+            try:
+                if future.result():
+                    downloaded += 1
+                else:
+                    failed.append(srr_id)
+            except Exception as e:
+                print(f"✗ {srr_id} - Crashed: {e}")
+                failed.append(srr_id)
     
     # Summary
     print(f"\n{'='*50}")
