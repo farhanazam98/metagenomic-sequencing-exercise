@@ -25,7 +25,7 @@ if __name__ == "__main__":
     missing = 0
     
     for srr_id in srr_list["srr_id"]:
-        if check_downloaded(srr_id, "data/raw"):
+        if check_downloaded(srr_id, "data/raw/fastq/"):
             downloaded += 1
         else:
             missing += 1
