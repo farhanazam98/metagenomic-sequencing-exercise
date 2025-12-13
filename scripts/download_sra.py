@@ -19,7 +19,7 @@ def compress_fastq_with_progress(fastq_path, threads=4):
         print(f"✓ {gz_path.name} already exists, skipping compression")
         return gz_path
 
-    print(f"    Compressing {fastq_path.name} with {COMPRESSOR} and progress bar...")
+    print(f"    Compressing {fastq_path.name}")
 
     if COMPRESSOR == "pigz":
         cmd = f"pv {fastq_path} | pigz -p {threads} > {gz_path}"
