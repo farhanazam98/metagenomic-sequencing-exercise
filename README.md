@@ -8,6 +8,8 @@ Metagenomic sequencing relies on downloading large SRA files for analysis. Howev
 - Manual download of large files is time-consuming and error-prone
 - Cloud deployment requires understanding SRA toolkit configuration
 - Reproducibility requires careful dependency management
+- Existing documentation is scattered/dated
+
 
 This toolkit provides working scripts and documentation for setting up an efficient SRA download workflow, particularly useful for researchers validating or extending published metagenomic analyses.
 
@@ -21,6 +23,7 @@ This toolkit provides working scripts and documentation for setting up an effici
 ### 2. AWS EC2 Setup Guide
 - EC2 instance configuration for SRA downloads
 - Documentation on SRA toolkit setup in EC2 instance
+- Script for downloading dependencies
 
 ## Quick Start
 
