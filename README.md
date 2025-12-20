@@ -6,8 +6,8 @@ A practical guide and scripts for downloading metagenomic sequencing data from N
 
 Metagenomic sequencing relies on downloading large SRA files for analysis. However, downloading this data presents practical barriers:
 - Manual download of large files is time-consuming and error-prone
-- Cloud deployment requires understanding SRA toolkit configuration
-- Reproducibility requires careful dependency management
+- Cloud deployment involves frustrating trial-and-error
+- Requires careful dependency management
 - Existing documentation is scattered/dated
 
 
