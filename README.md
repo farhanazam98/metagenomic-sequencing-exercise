@@ -13,7 +13,7 @@ This toolkit provides working scripts and documentation for setting up an effici
 
 ## What This Provides
 
-### 1. SRA Download Scripts
+### 1. SRA Download Script
 - **Batch downloading** from sample accession lists
 - **Error handling** with failed sample tracking and continuation from interruptions
 - **Progress monitoring** for download + fastq conversion
