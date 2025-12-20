@@ -26,15 +26,6 @@ This toolkit provides working scripts and documentation for setting up an effici
 
 See [workflow.ipynb](workflow.ipynb) for detailed setup instructions
 
-## Technical Notes
+## License
 
-## Related Work
-
-This toolkit enables replication of analyses like:
-- [Crits-Christoph et al. wastewater surveillance](https://data.securebio.org/wills-public-notebook/notebooks/2024-10-17_crits-christoph-2-4-0.html)
-
-## Limitations
-
-- Focuses on download/preprocessing; viral detection is separate
-- Sequential downloads (no parallelization currently implemented)
-- Assumes standard SRA toolkit installation
+MIT
