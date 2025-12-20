@@ -1,7 +1,40 @@
-# metagenomic-sequencing-exercise
-Obtain the high-level composition of the samples in the [Crits-Christoph et al. (2021)](https://journals.asm.org/doi/10.1128/mbio.02703-20) study, which includes 18 raw sewage samples collected from wastewater treatment facilities in the San Francisco Bay Area. I am essentially reproducing the results from [Will’s notebook](https://data.securebio.org/wills-public-notebook/notebooks/2024-02-04_crits-christoph-1.html). 
+# SRA Download Toolkit for Metagenomic Studies
 
-## Key Concepts
+A practical guide and scripts for downloading metagenomic sequencing data from NCBI's Sequence Read Archive (SRA). Developed while reproducing the [Crits-Christoph et al. wastewater surveillance analysis](https://data.securebio.org/wills-public-notebook/notebooks/2024-10-17_crits-christoph-2-4-0.html).
 
-**SRA**: NCBI's public repository for DNA sequencing data. It can be thought of as "GitHub for genomic reads"
-**R1/R2 Reads**: For each DNA fragment, there are two FASTQ files, one of which stores a "forward read" (R1) and another which stores a "reverse read" (R2). Both of these are required for metagenomic sequencing. Here's a [short article](https://www.khanacademy.org/science/ap-biology/gene-expression-and-regulation/replication/a/hs-dna-structure-and-replication-review) that explains how DNA is structured.. 
+## Motivation
+
+Metagenomic sequencing relies on downloading large SRA files for analysis. However, downloading this data presents practical barriers:
+- Manual download of large files is time-consuming and error-prone
+- Cloud deployment requires understanding SRA toolkit configuration
+- Reproducibility requires careful dependency management
+
+This toolkit provides working scripts and documentation for setting up an efficient SRA download workflow, particularly useful for researchers validating or extending published metagenomic analyses.
+
+## What This Provides
+
+### 1. SRA Download Scripts
+- **Batch downloading** from sample accession lists
+- **Error handling** with failed sample tracking and continuation from interruptions
+- **Progress monitoring** for download + fastq conversion
+
+### 2. AWS EC2 Setup Guide
+- EC2 instance configuration for SRA downloads
+- Documentation on SRA toolkit setup in EC2 instance
+
+## Quick Start
+
+See [workflow.ipynb](workflow.ipynb) for detailed setup instructions
+
+## Technical Notes
+
+## Related Work
+
+This toolkit enables replication of analyses like:
+- [Crits-Christoph et al. wastewater surveillance](https://data.securebio.org/wills-public-notebook/notebooks/2024-10-17_crits-christoph-2-4-0.html)
+
+## Limitations
+
+- Focuses on download/preprocessing; viral detection is separate
+- Sequential downloads (no parallelization currently implemented)
+- Assumes standard SRA toolkit installation
